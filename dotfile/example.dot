@@ -1,0 +1,22 @@
+digraph example {
+    graph[
+    rankdir = "LR"
+    ];
+
+    node1 [
+    label = "<f0> hehe|h|<f3> h"
+    shape = "record"
+    ];
+    node2 [
+    label = "<f0> haha|h|<f3> h"
+    shape = "record"
+    ];
+    node3 [
+    label = "<f0> fff|h|<f3> h"
+    shape = "record"
+    ];
+
+    node1 -> node2;
+    node2:f3 -> node3:f0;
+    node3:f3 -> node1:f0;
+}
