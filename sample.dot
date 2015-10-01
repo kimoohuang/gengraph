@@ -1,0 +1,11 @@
+digraph G {
+N1 [shape=ellipse,color=blue,style=bold,label="WIGIT_CLASSNAME$VIEW_TEXT"];
+N2 [shape=box,color=black,style=bold,label="Tag:TAINT\nCLASSNAME;METHODNAME_1"];
+N3 [shape=box,color=black,style=bold,label="Tag:TAINT\nCLASSNAME;METHODNAME_2"];
+N4 [shape=ellipse,color=red,style=bold,label="Tag:TAINT\nlibcore.os.send(ADDRESS) DATA:xxx"];
+
+N1 -> N2;
+N2 -> N3;
+N3 -> N2;
+N3 -> N4;
+}

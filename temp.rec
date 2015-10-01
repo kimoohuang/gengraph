@@ -1,0 +1,24 @@
+CLICKEVENT:id:2131361803;com.kugou.android:id/comm_main_top_menu
+    ----> Node:151 libcore.os.send(42.62.68.65) received data with tag 0x400 data=[content={"productid":"4","deviceid":"356489052416489$4e77af8c476d","imei":"356489052416489","imsi":"] 
+
+
+CLICKEVENT:id:2131362339;com.kugou.android:id/top_kan_layout
+    ----> Node:127 libcore.os.send(42.62.68.65) received data with tag 0x400 data=[content={"productid":"5","deviceid":"356489052416489$4e77af8c476d","imei":"356489052416489","imsi":"] 
+
+
+#CLICKEVENT:id:2131362341;com.kugou.android:id/top_chang_layout
+    #----> Node:33 libcore.os.send(42.62.68.65) received data with tag 0x400 data=[content={"productid":"4","deviceid":"356489052416489$4e77af8c476d","imei":"356489052416489","imsi":"] 
+
+
+#CLICKEVENT:id:2131363900;com.kugou.android:id/special_play
+    #----> Node:98 libcore.os.send(42.62.59.195) received data with tag 0x400 data=[{"data":[{"hash":"9de8f198eb8e0a7f6cfe34e187e3655a"},{"hash":"2e426f8def63a8f8036e823fc1bd4ab6"},{"h] 
+
+
+#CLICKEVENT:id:2131364745;com.kugou.android:id/song_hot_tv
+    #----> Node:57 libcore.os.send(42.62.68.65) received data with tag 0x400 data=[content={"productid":"4","deviceid":"356489052416489$4e77af8c476d","imei":"356489052416489","imsi":"] 
+
+
+#CLICKEVENT:id:2131364806;com.kugou.android:id/ktv_navigation_recommend_product_content
+    #----> Node:175 libcore.os.send(42.62.68.65) received data with tag 0x400 data=[content={"productid":"4","deviceid":"356489052416489$4e77af8c476d","imei":"356489052416489","imsi":"] 
+
+

@@ -17,7 +17,7 @@
 
 using namespace std;
 
-enum LogType_enum {CLICKEVENT, INMETHOD, TAINTSINK};
+enum LogType_enum {CLICKEVENT, INMETHOD, TAINTSINK, STRINMET, OTHER};
 typedef enum LogType_enum LogType;
 
 class Node{
@@ -25,29 +25,17 @@ class Node{
         int number;
         LogType log_type;    // onclickevent, inmethod or taintsink
         string log_detail;   // classname#method
+        string log_extra;    //extra info: for Method: string values; for CLICKEVENT: text info
         int log_tag = 0;  // the taint tag
+
         Node(){}
         Node(string line, LogType type);
 
         void addNumber(int num);
         void addClickInfo(string line);
+        void addLogExtra(string line);
         void printNode();
 };
-
-
-/*
-class Edge{
-    public:
-        Node * begin_point;
-        Node * end_point;
-        Edge(Node * a, Node * b){
-            this->begin_point = a;
-            this->end_point = b;
-        }
-        ~Edge(){}
-};
-*/
-
 
 //typedef list<Edge> edge_collection;
 
@@ -58,6 +46,7 @@ typedef map<string, Node*> MapAdjItem;        // map frome the name of the edge.
 class MapAdjHead{
     public:
         int filter_flag = 0;
+        int begin = 0;
         Node * node = NULL;
         MapAdjItem map_adj_item;
 

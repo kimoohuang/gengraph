@@ -14,6 +14,11 @@ LogType typeOfLine(string line){
     found = line.find("TaintSink");
     if(found != line.npos)
         return TAINTSINK;
+    found = line.find("STRINMET");
+    if(found != line.npos)
+        return STRINMET;
+
+    return OTHER;
 }
 //void printNode(Node *){
 //}
@@ -152,6 +157,14 @@ int main(int argc , char * argv[]){
                         continue;
                 }
                 break;
+            case STRINMET:
+                {
+                    if(log_flag == true){
+                        is_clickevent = false; //change the  state  from clickevent to non-clickevent
+                        temp_method_node_pre->addLogExtra(line);
+                    }
+                }
+                break;
             default:
                 {
                     continue;
@@ -229,11 +242,21 @@ int main(int argc , char * argv[]){
         MapAdj * temp_map_adj2 = NULL;
         HasFilter::iterator it_hf;
         for(it_hf = graph->has_filter.begin(); it_hf != graph->has_filter.end(); ++it_hf){
-            MapHeaders::iterator it;
+            MapHeaders::iterator it; // the CLICKEVENT node
             it = graph->map_headers.find(it_hf->first);
             if(temp_map_adj == NULL){
+                MapAdjItem::iterator it_mai;  // mark the begin methods and erase the CLICKEVENT nodes
+                // insert an start node
+                it->second->insert(MapAdj::value_type("START",new MapAdjHead(new Node("START",OTHER))));
+                for(it_mai = it->second->find(it->first)->second->map_adj_item.begin();it_mai != it->second->find(it->first)->second->map_adj_item.end();++it_mai){
+                    it->second->find(it_mai->first)->second->begin = 1;
+                    it->second->find("START")->second->map_adj_item.insert(MapAdjItem::value_type(it_mai->first,it_mai->second));
+                }
+                it->second->erase(it->first);
                 temp_map_adj = it->second;
-            }else{
+            }else{  // combine all the filter graphes into one
+
+
                 temp_map_adj2 = it->second;
                 MapAdj::iterator it_ma_t; 
                 MapAdj::iterator it_ma; 
@@ -246,8 +269,19 @@ int main(int argc , char * argv[]){
                         temp_map_adj->insert(MapAdj::value_type(it_ma->first,new MapAdjHead(it_ma->second->node,true)));
                     }
                 }// for   insert nodes.
+
+                MapAdjItem::iterator it_mai_1;  // mark the begin methods and erase the CLICKEVENT nodes
+                for(it_mai_1 = it->second->find(it->first)->second->map_adj_item.begin();it_mai_1 != it->second->find(it->first)->second->map_adj_item.end();++it_mai_1){
+                    //it->second->find(it_mai_1->first)->second->begin = 1;
+                    temp_map_adj->find("START")->second->map_adj_item.insert(MapAdjItem::value_type(it_mai_1->first,temp_map_adj->find(it_mai_1->first)->second->node));
+                }
+                temp_map_adj->erase(it->first);
+                temp_map_adj2->erase(it->first);
+
+
+                // update teh edges
                 for(it_ma = temp_map_adj2->begin();it_ma!=temp_map_adj2->end();++it_ma){
-                    it_ma_t = temp_map_adj->find(it_ma->first);
+                    it_ma_t = temp_map_adj->find(it_ma->first); //items in temp_map_adj
                     MapAdjItem::iterator it_mai;
                     MapAdjItem::iterator it_mai_t;
                     for(it_mai = it_ma->second->map_adj_item.begin();it_mai != it_ma->second->map_adj_item.end(); ++it_mai){
@@ -259,11 +293,45 @@ int main(int argc , char * argv[]){
                     //    temp_map_adj->insert(MapAdj::value_type(it_ma->first,it_ma->second));
                 }//for   insert edge
 
+
+
             }//if  temp_map_header
         }// for has_filter
 
-        //print the filter graph
+        MapAdj::iterator it_ma_t;
         MapAdj::iterator it_ma;
+        MapAdjItem::iterator it_mai_2;
+        MapAdjItem::iterator it_mai;
+        MapAdjItem::iterator it_mai_t;
+        for(it_ma_t = temp_map_adj->begin();it_ma_t != temp_map_adj->end();++it_ma_t){
+            if(it_ma_t->second->node->log_type == TAINTSINK){
+                for(it_ma = temp_map_adj->begin();it_ma != temp_map_adj->end();++it_ma){
+                    if(it_ma->second->filter_flag != 0){
+                            cout <<"fuck"<<endl;
+                        it_mai_2 = it_ma->second->map_adj_item.find(it_ma_t->first);
+                        if(it_mai_2 != it_ma->second->map_adj_item.end()){
+                            it_ma->second->map_adj_item.erase(it_ma_t->first);//erase the sink edge
+                            for(it_mai = it_ma_t->second->map_adj_item.begin();it_mai != it_ma_t->second->map_adj_item.end(); ++it_mai){
+                                it_mai_t = it_ma->second->map_adj_item.find(it_mai->first);
+                                if(it_mai_t == it_ma->second->map_adj_item.end()){
+                                    it_ma->second->map_adj_item.insert(MapAdjItem::value_type(it_mai->first, temp_map_adj->find(it_mai->first)->second->node));
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }//if TAINTSINK
+        }
+
+        for(it_ma_t = temp_map_adj->begin();it_ma_t != temp_map_adj->end();++it_ma_t){
+            if(it_ma_t->second->node->log_type == TAINTSINK){
+                temp_map_adj->erase(it_ma_t->first);
+            }
+        }
+
+        //print the filter graph
+        //MapAdj::iterator it_ma;
         file_filter << "digraph G {" << endl;
         for(it_ma = temp_map_adj->begin();it_ma != temp_map_adj->end(); ++ it_ma){
             it_ma->second->printNodeDot(file_filter);

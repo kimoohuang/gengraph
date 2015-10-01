@@ -13,11 +13,15 @@ INMETHOD tag:1024 Method:Ljava/lang/StringBuilder;append
 INMETHOD tag:1024 Method:Ljava/lang/AbstractStringBuilder;append0
 INMETHOD tag:1024 Method:Lorg/apache/harmony/xnet/provider/jsse/OpenSSLMessageDigestJDK;engineUpdate
 INMETHOD tag:1024 Method:Lorg/apache/harmony/xnet/provider/jsse/NativeCrypto;EVP_DigestUpdate
-CLICKEVENT ONCLICK 
+D/TraceLog(13720): CLICKEVENT class android.widget.TextView$热门歌曲
+D/TraceLog(13720): CLICKEVENT ONCLICK:id:2131364745;com.kugou.android:id/song_hot_tv
 INMETHOD tag:1024 Method:Lorg/apache/harmony/xnet/provider/jsse/OpenSSLMessageDigestJDK;engineUpdate
 INMETHOD tag:1024 Method:Lorg/apache/harmony/xnet/provider/jsse/NativeCrypto;EVP_DigestUpdate
 INMETHOD tag:1024 Method:Lorg/apache/harmony/xnet/provider/jsse/OpenSSLMessageDigestJDK;engineUpdate
 INMETHOD tag:1024 Method:Lorg/apache/harmony/xnet/provider/jsse/NativeCrypto;EVP_DigestUpdate
+W/TraceLog(12551): INMETHOD tag:1024 Method:Lorg/apache/http/cookie/CookieOrigin;<init>,(Ljava/lang/String;ILjava/lang/String;Z)V
+W/TraceLog(12551): STRINMETHO #1:config.mobile.kugou.com
+W/TraceLog(12551): STRINMETHO #2:/api/v2/config/index
 INMETHOD tag:1024 Method:Ljava/util/LinkedHashMap;removeEldestEntry
 INMETHOD tag:1024 Method:Ljava/util/LinkedHashMap$LinkedEntry;<init>
 INMETHOD tag:1024 Method:Ljava/util/HashMap$HashMapEntry;<init>

@@ -11,18 +11,24 @@ Node::Node(string line, LogType type){
                 if(p1 != line.npos && p2 != line.npos){
                     log_tag = atoi(line.substr(p1+4, p2-p1-4).c_str());
                     log_detail = line.substr(p2+8);
+                    log_extra = "String args:";
                 }
             }
             break;
         case CLICKEVENT:
             {
+                size_t p1 = line.find("ONCLICK");
+                if(p1 != line.npos){
+                    log_detail = line.substr(p1+8);
+                    log_extra = "no";
+                    log_tag = 0;
+                }
                 size_t p3 = line.find("class");
                 if(p3 != line.npos){
-                    log_detail = line.substr(p3+6);
+                    log_extra = line.substr(p3+6);
                     log_tag = 0;
-                }else{
                     log_detail = "onclick";
-                    log_tag = 9;
+                    //log_tag = 9;  // why 9?
                 }
             }
             break;
@@ -46,31 +52,37 @@ void Node::addNumber(int num){
 }
 
 void Node::addClickInfo(string line){
-    size_t p1 = line.find("class");
+    size_t p1 = line.find("ONCLICK");
     if(p1 != line.npos){
-        log_detail = line.substr(p1+6);
+        log_detail = line.substr(p1+8);
+    }
+}
+
+void Node::addLogExtra(string line){
+    size_t p1 = line.find("#");
+    if(p1 != line.npos){
+        log_extra.append(line.substr(p1));
     }
 }
 
 void Node::printNode(){
     switch(log_type){
-        case INMETHOD:
-            {
-                cout << "INMETHOD:";
-            }
-            break;
+        case INMETHOD: {
+                           cout << "INMETHOD:";
+                       }
+                       break;
         case CLICKEVENT:
-            {
-                cout << "CLICKEVENT";
-            }
-            break;
+                       {
+                           cout << "CLICKEVENT";
+                       }
+                       break;
         case TAINTSINK:
-            {
-                cout << "TAINTSINK";
-            }
-            break;
+                       {
+                           cout << "TAINTSINK";
+                       }
+                       break;
         default:
-            break;
+                       break;
     }
     cout << log_tag << log_detail << endl;
 }
@@ -111,25 +123,40 @@ string& string_replace(string& s1,const string& s2,const string& s3){
 string& string_insert_newline(string & str){
     size_t pos=40;
     if(str.length() > 50){
-    for(pos = 40; pos < str.length();pos+=40){
-        str.insert(pos,"-\\n");
-        pos +=3;
-    }
+        for(pos = 40; pos < str.length();pos+=40){
+            str.insert(pos,"-\\n");
+            pos +=3;
+        }
     }
     return str;
 }
 
 void MapAdjHead::printNodeDot(fstream &dot_file, fstream &file_recom){
     dot_file << "N" << node->number << " [";
+    if(node != NULL){
     switch(node->log_type){
         case INMETHOD:
-            {
-                dot_file << "shape=box,color=black,style=bold,label=\"Node:" << node->number <<"\\nTag:"<< node->log_tag << "\\n" << node->log_detail << "\"];" << endl;
+            {   
+                if(begin ==0 ){
+                    if(node->log_extra.length() > 13)
+                        dot_file << "shape=box,color=black,style=bold,label=\"Node:" <<node->number<<"\\nTag:"<< node->log_tag << "\\n" << node->log_detail << "\\n" <<node->log_extra << "\"];" << endl;
+                    else
+                        dot_file << "shape=box,color=black,style=bold,label=\"Node:" <<node->number <<"\\nTag:"<< node->log_tag << "\\n" << node->log_detail << "\"];" << endl;
+                }
+                else{
+                    if(node->log_extra.length() > 13)
+                        dot_file << "shape=box,color=blue,style=bold,label=\"Node:" <<node->number<<"\\nTag:"<< node->log_tag << "\\n" << node->log_detail << "\\n" <<node->log_extra << "\"];" << endl;
+                    else
+                        dot_file << "shape=box,color=blue,style=bold,label=\"Node:" <<node->number <<"\\nTag:"<< node->log_tag << "\\n" << node->log_detail << "\"];" << endl;
+                }
             }
             break;
         case CLICKEVENT:
             {
-                dot_file << "shape=ellipse,color=blue,style=bold,label=\"Node:" << node->number << "\\n" << node->log_detail << "\"];" << endl;
+                if(node->log_extra.length() > 3)
+                    dot_file << "shape=ellipse,color=blue,style=bold,label=\"Node:" << node->number << "\\n" << node->log_detail<<"\\n"<<node->log_extra << "\"];" << endl;
+                else
+                    dot_file << "shape=ellipse,color=blue,style=bold,label=\"Node:" << node->number << "\\n" << node->log_detail << "\"];" << endl;
             }
             break;
         case TAINTSINK:
@@ -139,26 +166,41 @@ void MapAdjHead::printNodeDot(fstream &dot_file, fstream &file_recom){
             }
             break;
         default:
+            dot_file << "shape=ellipse,color=blue,style=bold,label=\"START\"];" << endl;
             break;
 
     }
+    }else
+        dot_file << "shape=ellipse,color=blue,style=bold,label=\"START\"];" << endl;
 }
 
 void MapAdjHead::printNodeDot(fstream &dot_file){
     dot_file << "N" << node->number << " [";
+    if(node != NULL){
     switch(node->log_type){
         case INMETHOD:
             {
-                if(filter_flag == 0)
-                dot_file << "shape=box,color=black,style=bold,label=\"" <<"Tag:"<< node->log_tag << "\\n" << node->log_detail << "\"];" << endl;
-                else
-                dot_file << "shape=box,color=blue,style=bold,label=\"Block the Message!" <<"\\nTag:"<< node->log_tag << "\\n" << node->log_detail << "\"];" << endl;
+                if(filter_flag == 0){
+                    if(node->log_extra.length() > 13)
+                        dot_file << "shape=box,color=black,style=bold,label=\"" <<"Tag:"<< node->log_tag << "\\n" << node->log_detail << "\\n" <<node->log_extra << "\"];" << endl;
+                    else
+                        dot_file << "shape=box,color=black,style=bold,label=\"" <<"Tag:"<< node->log_tag << "\\n" << node->log_detail << "\"];" << endl;
+                }
+                else{
+                    if(node->log_extra.length() > 13)
+                        dot_file << "shape=box,color=red,style=bold,label=\"Block the Message!" <<"\\nTag:"<< node->log_tag << "\\n" << node->log_detail<<"\\n"<<node->log_extra << "\"];" << endl;
+                    else
+                        dot_file << "shape=box,color=red,style=bold,label=\"Block the Message!" <<"\\nTag:"<< node->log_tag << "\\n" << node->log_detail << "\"];" << endl;
+                }
 
             }
             break;
         case CLICKEVENT:
             {
-                dot_file << "shape=ellipse,color=blue,style=bold,label=\"Node:" << node->number << "\\n" << node->log_detail << "\"];" << endl;
+                if(node->log_extra.length() > 3)
+                    dot_file << "shape=ellipse,color=blue,style=bold,label=\"Node:" << node->number << "\\n" << node->log_detail<<"\\n"<<node->log_extra << "\"];" << endl;
+                else
+                    dot_file << "shape=ellipse,color=blue,style=bold,label=\"Node:" << node->number << "\\n" << node->log_detail << "\"];" << endl;
             }
             break;
         case TAINTSINK:
@@ -167,8 +209,11 @@ void MapAdjHead::printNodeDot(fstream &dot_file){
             }
             break;
         default:
+            dot_file << "shape=ellipse,color=blue,style=bold,label=\"START\"];" << endl;
             break;
     }
+    }else
+        dot_file << "shape=ellipse,color=blue,style=bold,label=\"START\"];" << endl;
 }
 
 void MapAdjHead::printEdgeDot(fstream &dot_file){
