@@ -2,8 +2,8 @@ CLICKEVENT:id:2131361803;com.kugou.android:id/comm_main_top_menu
     ----> Node:151 libcore.os.send(42.62.68.65) received data with tag 0x400 data=[content={"productid":"4","deviceid":"356489052416489$4e77af8c476d","imei":"356489052416489","imsi":"] 
 
 
-CLICKEVENT:id:2131362339;com.kugou.android:id/top_kan_layout
-    ----> Node:127 libcore.os.send(42.62.68.65) received data with tag 0x400 data=[content={"productid":"5","deviceid":"356489052416489$4e77af8c476d","imei":"356489052416489","imsi":"] 
+#CLICKEVENT:id:2131362339;com.kugou.android:id/top_kan_layout
+    #----> Node:127 libcore.os.send(42.62.68.65) received data with tag 0x400 data=[content={"productid":"5","deviceid":"356489052416489$4e77af8c476d","imei":"356489052416489","imsi":"] 
 
 
 #CLICKEVENT:id:2131362341;com.kugou.android:id/top_chang_layout
