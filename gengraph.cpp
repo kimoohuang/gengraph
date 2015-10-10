@@ -22,6 +22,28 @@ LogType typeOfLine(string line){
 }
 //void printNode(Node *){
 //}
+//
+
+//compare the log_detail of two nodes, if equal, return TRUE, else retrun false.
+bool compareNode(Node * a, Node * b){
+    if(a == NULL || b == NULL)
+        return false;
+    if(a->log_detail.compare(b->log_detail) == 0)
+        return true;
+    else 
+        return false;
+}
+
+void freeMapAdj(MapAdj * ma){
+    MapAdj::iterator ma_it;
+    if(ma != NULL){
+        for(ma_it = ma->begin(); ma_it != ma->end(); ++ma_it)
+        {
+            //delete((*ma_it)->node);
+            (*ma_it)->node = NULL;
+        }
+    }
+}
 
 
 int main(int argc , char * argv[]){
@@ -67,10 +89,18 @@ int main(int argc , char * argv[]){
     string line;
     bool log_flag = false;  // false:discard the log; 
     bool is_clickevent = false;      //false: non-clickevent log; true: clickevent
+    bool already = false;
+    bool first_method = true;
     Node  * temp_click_node = NULL;
+    Node * temp_method_node_tri = NULL;
     Node * temp_method_node_pre = NULL;
     Node * temp_method_node_cur = NULL;
+    MapAdjHead * mapadjhead_cli = NULL;
+    MapAdjHead * mapadjhead_tri = NULL;
+    MapAdjHead * mapadjhead_pre= NULL;
+    MapAdjHead * mapadjhead_cur= NULL;
     MapAdj * temp_map_adj = NULL;
+    MapAdj * map_adj = NULL;
     int count = 1;
 
     while(getline(file_log, line)){
@@ -79,6 +109,12 @@ int main(int argc , char * argv[]){
             case CLICKEVENT:
                 {
                     log_flag = true;
+                    first_method = true;
+                    if(temp_map_adj != NULL){
+                        freeMapAdj(temp_map_adj);
+                        //delete(temp_map_adj);
+                        temp_map_adj = NULL;
+                    }
                     if(is_clickevent == false){
                         is_clickevent = true;
                         temp_click_node = new Node(line, CLICKEVENT);
@@ -99,34 +135,75 @@ int main(int argc , char * argv[]){
                                 //no record
                                 //MapAdjHead * temp_map_adj_head =  new MapAdjHead(temp_click_node);
                                 temp_click_node->addNumber(count++);  // only if there is no record in the mapheader, the node is used and stored.
-                                temp_map_adj = new MapAdj();
-                                temp_map_adj->insert(MapAdj::value_type(temp_click_node->log_detail, new MapAdjHead(temp_click_node)));
-                                graph->map_headers.insert(MapHeaders::value_type(temp_click_node->log_detail,temp_map_adj));
+                                map_adj = new MapAdj();
+                                //temp_map_adj->insert(MapAdj::value_type(temp_click_node->log_detail, new MapAdjHead(temp_click_node)));
+                                mapadjhead_cur = new MapAdjHead(temp_click_node);  // create a new NODE
+                                mapadjhead_cli = mapadjhead_cur; 
+                                map_adj->push_back(mapadjhead_cur);
+
+                                graph->map_headers.insert(MapHeaders::value_type(temp_click_node->log_detail,map_adj));
                             }else{
+                                already = true;
                                 //already have a record
-                                temp_map_adj = it->second; // get the eixted map_adj
-                                string  temp_logtail = temp_click_node->log_detail;
+                                map_adj = it->second; // get the eixted map_adj
+                                //string  temp_logtail = temp_click_node->log_detail;
                                 delete(temp_click_node);  // free the temp_click_node
-                                temp_click_node = temp_map_adj->find(temp_logtail)->second->node;
+                                mapadjhead_cur = map_adj->front();  
+                                temp_click_node = mapadjhead_cur->node;
                             }
+                            temp_method_node_tri= temp_method_node_pre;
                             temp_method_node_pre = temp_click_node;
+                            mapadjhead_tri = mapadjhead_pre;
+                            mapadjhead_pre = mapadjhead_cur;
                             //temp_click_node->printNode();   //----debug
                         }
 
-                        temp_method_node_cur = new Node(line, INMETHOD);
-                        //temp_method_node_cur->printNode();   //----debug
-                        MapAdj::iterator it_m;
-                        it_m = temp_map_adj->find(temp_method_node_cur->log_detail);
-                        if(it_m == temp_map_adj->end()){
-                            // if no record in the MapAdj , add one;
-                            temp_method_node_cur->addNumber(count++);
-                            temp_map_adj->insert(MapAdj::value_type(temp_method_node_cur->log_detail, new MapAdjHead(temp_method_node_cur)));
-                        }else{
-                            delete(temp_method_node_cur);
-                            temp_method_node_cur = it_m->second->node;
+                        if(first_method){
+                            first_method = false;
+                            temp_map_adj = new MapAdj();
                         }
-                        temp_map_adj->find(temp_method_node_pre->log_detail)->second->map_adj_item.insert(MapAdjItem::value_type(temp_method_node_cur->log_detail, temp_method_node_cur));
+
+                        temp_method_node_cur = new Node(line, INMETHOD);  // the cur method node is created now.
+
+
+                        if(already){
+                            MapAdjItem::iterator mai_it;
+                            mai_it =mapadjhead_pre->map_adj_item.find(temp_method_node_cur->log_detail);
+                            if(mai_it != mapadjhead_pre->map_adj_item.end()){
+                                delete(temp_method_node_cur);
+                                mapadjhead_cur = mai_it->second;
+                                temp_method_node_cur = mapadjhead_cur->node;
+                            }else{
+                                already = false;
+                                temp_method_node_cur->addNumber(count++);
+                                mapadjhead_cur = new MapAdjHead(temp_method_node_cur);
+                                mapadjhead_pre->map_adj_item.insert(MapAdjItem::value_type(temp_method_node_cur->log_detail,mapadjhead_cur));
+                                temp_map_adj->push_back(mapadjhead_cur);
+                            }
+                        }else{
+                            //temp_method_node_cur->printNode();   //----debug
+                            if(compareNode(temp_method_node_pre,temp_method_node_cur)){ // one method loop
+                                delete(temp_method_node_cur);
+                                temp_method_node_cur = temp_method_node_pre;
+                                mapadjhead_cur = mapadjhead_pre;
+                                mapadjhead_pre->map_adj_item.insert(MapAdjItem::value_type(temp_method_node_cur->log_detail, mapadjhead_cur));
+
+                            }else if(compareNode(temp_method_node_tri,temp_method_node_cur)){ // two method loop
+                                delete(temp_method_node_cur);
+                                temp_method_node_cur = temp_method_node_tri;
+                                mapadjhead_cur = mapadjhead_tri;
+                                mapadjhead_pre->map_adj_item.insert(MapAdjItem::value_type(temp_method_node_cur->log_detail, mapadjhead_cur));
+                            }else {  // we have to keep  new node
+                                temp_method_node_cur->addNumber(count++);
+                                mapadjhead_cur = new MapAdjHead(temp_method_node_cur);
+                                mapadjhead_pre->map_adj_item.insert(MapAdjItem::value_type(temp_method_node_cur->log_detail,mapadjhead_cur));
+                                temp_map_adj->push_back(mapadjhead_cur);
+                            }
+                        }
+                        temp_method_node_tri= temp_method_node_pre;
                         temp_method_node_pre = temp_method_node_cur;
+                        mapadjhead_tri = mapadjhead_pre;
+                        mapadjhead_pre = mapadjhead_cur;
 
                     }else
                         continue;
@@ -140,19 +217,54 @@ int main(int argc , char * argv[]){
                         graph->is_sink.insert(IsSink::value_type(temp_click_node->log_detail , true));
 
                         temp_method_node_cur = new Node(line, TAINTSINK);
-                        //temp_method_node_cur->printNode();   //----debug
-                        MapAdj::iterator it_m;
-                        it_m = temp_map_adj->find(temp_method_node_cur->log_detail);
-                        if(it_m == temp_map_adj->end()){
-                            // if no record in the MapAdj , add one;
-                            temp_method_node_cur->addNumber(count++);
-                            temp_map_adj->insert(MapAdj::value_type(temp_method_node_cur->log_detail, new MapAdjHead(temp_method_node_cur)));
+
+                        if(already){
+                            MapAdjItem::iterator mai_it;
+                            mai_it =mapadjhead_pre->map_adj_item.find(temp_method_node_cur->log_detail);
+                            if(mai_it != mapadjhead_pre->map_adj_item.end()){
+                                delete(temp_method_node_cur);
+                                mapadjhead_cur = mai_it->second;
+                                temp_method_node_cur = mapadjhead_cur->node;
+                            }else{
+                                already = false;
+                                temp_method_node_cur->addNumber(count++);
+                                mapadjhead_cur = new MapAdjHead(temp_method_node_cur);
+                                mapadjhead_pre->map_adj_item.insert(MapAdjItem::value_type(temp_method_node_cur->log_detail,mapadjhead_cur));
+                                temp_map_adj->push_back(mapadjhead_cur);
+                            }
                         }else{
-                            delete(temp_method_node_cur);
-                            temp_method_node_cur = it_m->second->node;
+                            if(compareNode(temp_method_node_pre,temp_method_node_cur)){ // one method loop
+                                delete(temp_method_node_cur);
+                                temp_method_node_cur = temp_method_node_pre;
+                                mapadjhead_cur = mapadjhead_pre;
+                                mapadjhead_pre->map_adj_item.insert(MapAdjItem::value_type(temp_method_node_cur->log_detail, mapadjhead_cur));
+                            }else if(compareNode(temp_method_node_tri,temp_method_node_cur)){ // two method loop
+                                delete(temp_method_node_cur);
+                                temp_method_node_cur = temp_method_node_tri;
+                                mapadjhead_cur = mapadjhead_tri;
+                                mapadjhead_pre->map_adj_item.insert(MapAdjItem::value_type(temp_method_node_cur->log_detail, mapadjhead_cur));
+                            }else {  // we have to keep  new node
+                                temp_method_node_cur->addNumber(count++);
+                                mapadjhead_cur = new MapAdjHead(temp_method_node_cur);
+                                mapadjhead_pre->map_adj_item.insert(MapAdjItem::value_type(temp_method_node_cur->log_detail,mapadjhead_cur));
+                                temp_map_adj->push_back(mapadjhead_cur);
+                            }
                         }
-                        temp_map_adj->find(temp_method_node_pre->log_detail)->second->map_adj_item.insert(MapAdjItem::value_type(temp_method_node_cur->log_detail, temp_method_node_cur)); // add edge 
-                        temp_method_node_pre = temp_method_node_cur;
+                        //                        temp_method_node_tri= NULL;
+                        //                        temp_method_node_pre = NULL;
+                        //                        mapadjhead_tri = NULL;
+                        //                        mapadjhead_pre = NULL;
+                        first_method = true;
+                        if(temp_map_adj->size()>1)
+                            map_adj->insert(map_adj->end(), temp_map_adj->begin(), temp_map_adj->end());
+                        //freeMapAdj(temp_map_adj);
+                        delete(temp_map_adj);
+                        temp_map_adj = NULL;
+                        temp_method_node_tri= NULL; 
+                        temp_method_node_pre = temp_click_node;
+                        mapadjhead_tri = NULL;
+                        mapadjhead_pre = mapadjhead_cli;
+
                     }else
                         continue;
                 }
@@ -173,6 +285,11 @@ int main(int argc , char * argv[]){
         }//switch
     }//while
 
+                    if(temp_map_adj != NULL){
+                        freeMapAdj(temp_map_adj);
+                        //delete(temp_map_adj);
+                        temp_map_adj = NULL;
+                    }
 
     if( atoi(argv[2]) == 1 ){
         //print the  graph
@@ -192,18 +309,18 @@ int main(int argc , char * argv[]){
             if(graph->is_sink.find(it_mh->first)->second == true){
                 file_recom << "#CLICKEVENT:" << it_mh->first << endl;            
                 for(it_ma = it_mh->second->begin();it_ma != it_mh->second->end(); ++it_ma){
-                    it_ma->second->printNodeDot(file_dot, file_recom); 
+                    (*it_ma)->printNodeDot(file_dot, file_recom); 
                 }
                 file_recom << endl << endl;
             }
         }
-
+cout<<"fuckkkkk"<<endl;
 
         for(it_mh = graph->map_headers.begin();it_mh != graph->map_headers.end();++it_mh){
             //cout << "N0 -> N" <<  
             if(graph->is_sink.find(it_mh->first)->second == true){
                 for(it_ma = it_mh->second->begin();it_ma != it_mh->second->end(); ++it_ma){
-                    it_ma->second->printEdgeDot(file_dot);    
+                    (*it_ma)->printEdgeDot(file_dot);    
                 }
             }
         }
@@ -229,9 +346,9 @@ int main(int argc , char * argv[]){
                         string sink_name = line.substr(pos);
                         MapAdj::iterator it_ma;
                         for(it_ma = temp_map_adj->begin();it_ma != temp_map_adj->end(); ++it_ma){
-                            if(it_ma->second->map_adj_item.find(sink_name) != it_ma->second->map_adj_item.end())
+                            if((*it_ma)->map_adj_item.find(sink_name) != (*it_ma)->map_adj_item.end())
                                 // mark the father node of the sink node
-                                it_ma->second->filter_flag = 1;
+                                (*it_ma)->filter_flag = 1;
                         }
                     }
                 }
@@ -247,52 +364,54 @@ int main(int argc , char * argv[]){
             if(temp_map_adj == NULL){
                 MapAdjItem::iterator it_mai;  // mark the begin methods and erase the CLICKEVENT nodes
                 // insert an start node
-                it->second->insert(MapAdj::value_type("START",new MapAdjHead(new Node("START",OTHER))));
-                for(it_mai = it->second->find(it->first)->second->map_adj_item.begin();it_mai != it->second->find(it->first)->second->map_adj_item.end();++it_mai){
-                    it->second->find(it_mai->first)->second->begin = 1;
-                    it->second->find("START")->second->map_adj_item.insert(MapAdjItem::value_type(it_mai->first,it_mai->second));
+                mapadjhead_cur =  new MapAdjHead(new Node("START",OTHER));  //store the start node
+                //it->second->push_back(mapadjhead_cur);
+                for(it_mai = it->second->front()->map_adj_item.begin();it_mai != it->second->front()->map_adj_item.end();++it_mai){
+                    it->second->front()->begin = 1;
+                    mapadjhead_cur->map_adj_item.insert((*it_mai));
                 }
-                it->second->erase(it->first);
+                it->second->erase(it->second->begin());
+                it->second->insert(it->second->begin(),mapadjhead_cur);
                 temp_map_adj = it->second;
             }else{  // combine all the filter graphes into one
-
 
                 temp_map_adj2 = it->second;
                 MapAdj::iterator it_ma_t; 
                 MapAdj::iterator it_ma; 
-                for(it_ma = temp_map_adj2->begin();it_ma!=temp_map_adj2->end();++it_ma){
-                    it_ma_t = temp_map_adj->find(it_ma->first);
-                    if(it_ma_t != temp_map_adj->end()){
-                        it_ma_t->second->filter_flag += it_ma->second->filter_flag;
-                    }else{
-                        //temp_map_adj->insert(MapAdj::value_type(it_ma->first,it_ma->second));
-                        temp_map_adj->insert(MapAdj::value_type(it_ma->first,new MapAdjHead(it_ma->second->node,true)));
-                    }
+                /*
+                   for(it_ma = temp_map_adj2->begin();it_ma!=temp_map_adj2->end();++it_ma){
+                   it_ma_t = temp_map_adj->find(it_ma->first);
+                   if(it_ma_t != temp_map_adj->end()){
+                   it_ma_t->second->filter_flag += it_ma->second->filter_flag;
+                   }else{
+                //temp_map_adj->insert(MapAdj::value_type(it_ma->first,it_ma->second));
+                temp_map_adj->insert(MapAdj::value_type(it_ma->first,new MapAdjHead(it_ma->second->node,true)));
+                }
                 }// for   insert nodes.
+                */
+                temp_map_adj->insert(temp_map_adj->end(),temp_map_adj2->begin()+1,temp_map_adj2->end());  //insert nodes except the CLICKNODE
 
                 MapAdjItem::iterator it_mai_1;  // mark the begin methods and erase the CLICKEVENT nodes
-                for(it_mai_1 = it->second->find(it->first)->second->map_adj_item.begin();it_mai_1 != it->second->find(it->first)->second->map_adj_item.end();++it_mai_1){
+                for(it_mai_1 = it->second->front()->map_adj_item.begin();it_mai_1 != it->second->front()->map_adj_item.end();++it_mai_1){
                     //it->second->find(it_mai_1->first)->second->begin = 1;
-                    temp_map_adj->find("START")->second->map_adj_item.insert(MapAdjItem::value_type(it_mai_1->first,temp_map_adj->find(it_mai_1->first)->second->node));
+                    mapadjhead_cur->map_adj_item.insert((*it_mai_1));
                 }
-                temp_map_adj->erase(it->first);
-                temp_map_adj2->erase(it->first);
 
-
+                /*
                 // update teh edges
                 for(it_ma = temp_map_adj2->begin();it_ma!=temp_map_adj2->end();++it_ma){
-                    it_ma_t = temp_map_adj->find(it_ma->first); //items in temp_map_adj
-                    MapAdjItem::iterator it_mai;
-                    MapAdjItem::iterator it_mai_t;
-                    for(it_mai = it_ma->second->map_adj_item.begin();it_mai != it_ma->second->map_adj_item.end(); ++it_mai){
-                        it_mai_t = it_ma_t->second->map_adj_item.find(it_mai->first);
-                        if(it_mai_t == it_ma_t->second->map_adj_item.end()){
-                            it_ma_t->second->map_adj_item.insert(MapAdjItem::value_type(it_mai->first, temp_map_adj->find(it_mai->first)->second->node));
-                        }
-                    }
-                    //    temp_map_adj->insert(MapAdj::value_type(it_ma->first,it_ma->second));
+                it_ma_t = temp_map_adj->find(it_ma->first); //items in temp_map_adj
+                MapAdjItem::iterator it_mai;
+                MapAdjItem::iterator it_mai_t;
+                for(it_mai = it_ma->second->map_adj_item.begin();it_mai != it_ma->second->map_adj_item.end(); ++it_mai){
+                it_mai_t = it_ma_t->second->map_adj_item.find(it_mai->first);
+                if(it_mai_t == it_ma_t->second->map_adj_item.end()){
+                it_ma_t->second->map_adj_item.insert(MapAdjItem::value_type(it_mai->first, temp_map_adj->find(it_mai->first)->second->node));
+                }
+                }
+                //    temp_map_adj->insert(MapAdj::value_type(it_ma->first,it_ma->second));
                 }//for   insert edge
-
+                */
 
 
             }//if  temp_map_header
@@ -304,17 +423,17 @@ int main(int argc , char * argv[]){
         MapAdjItem::iterator it_mai;
         MapAdjItem::iterator it_mai_t;
         for(it_ma_t = temp_map_adj->begin();it_ma_t != temp_map_adj->end();++it_ma_t){
-            if(it_ma_t->second->node->log_type == TAINTSINK){
+            if((*it_ma_t)->node->log_type == TAINTSINK){
                 for(it_ma = temp_map_adj->begin();it_ma != temp_map_adj->end();++it_ma){
-                    if(it_ma->second->filter_flag != 0){
-                            cout <<"fuck"<<endl;
-                        it_mai_2 = it_ma->second->map_adj_item.find(it_ma_t->first);
-                        if(it_mai_2 != it_ma->second->map_adj_item.end()){
-                            it_ma->second->map_adj_item.erase(it_ma_t->first);//erase the sink edge
-                            for(it_mai = it_ma_t->second->map_adj_item.begin();it_mai != it_ma_t->second->map_adj_item.end(); ++it_mai){
-                                it_mai_t = it_ma->second->map_adj_item.find(it_mai->first);
-                                if(it_mai_t == it_ma->second->map_adj_item.end()){
-                                    it_ma->second->map_adj_item.insert(MapAdjItem::value_type(it_mai->first, temp_map_adj->find(it_mai->first)->second->node));
+                    if((*it_ma)->filter_flag != 0){
+                        cout <<"fuck!"<<endl;
+                        it_mai_2 = (*it_ma)->map_adj_item.find((*it_ma_t)->node->log_detail);
+                        if(it_mai_2 != (*it_ma)->map_adj_item.end()){
+                            (*it_ma)->map_adj_item.erase((*it_ma_t)->node->log_detail);//erase the sink edge
+                            for(it_mai = (*it_ma_t)->map_adj_item.begin();it_mai != (*it_ma_t)->map_adj_item.end(); ++it_mai){
+                                it_mai_t = (*it_ma)->map_adj_item.find(it_mai->first);
+                                if(it_mai_t == (*it_ma)->map_adj_item.end()){
+                                    (*it_ma)->map_adj_item.insert((*it_mai));
                                 }
                             }
                         }
@@ -324,20 +443,28 @@ int main(int argc , char * argv[]){
             }//if TAINTSINK
         }
 
-        for(it_ma_t = temp_map_adj->begin();it_ma_t != temp_map_adj->end();++it_ma_t){
-            if(it_ma_t->second->node->log_type == TAINTSINK){
-                temp_map_adj->erase(it_ma_t->first);
+        cout <<"fuck!!"<<endl;
+        bool del_all = false;
+        while(!del_all){ 
+            for(it_ma_t = temp_map_adj->begin();it_ma_t != temp_map_adj->end();++it_ma_t){
+                del_all = true;
+                if((*it_ma_t)->node->log_type == TAINTSINK){
+                    temp_map_adj->erase(it_ma_t);
+                    del_all = false;
+                    break;
+                }
             }
         }
+        cout <<"fuck!!!"<<endl;
 
         //print the filter graph
         //MapAdj::iterator it_ma;
         file_filter << "digraph G {" << endl;
         for(it_ma = temp_map_adj->begin();it_ma != temp_map_adj->end(); ++ it_ma){
-            it_ma->second->printNodeDot(file_filter);
+            (*it_ma)->printNodeDot(file_filter);
         }//for it_ma
         for(it_ma = temp_map_adj->begin();it_ma != temp_map_adj->end(); ++ it_ma){
-            it_ma->second->printEdgeDot(file_filter);
+            (*it_ma)->printEdgeDot(file_filter);
         }//for it_ma
         file_filter << "}";
     }//if argv

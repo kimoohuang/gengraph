@@ -14,6 +14,7 @@
 #include<string>
 #include<list>
 #include<map>
+#include<vector>
 
 using namespace std;
 
@@ -38,9 +39,8 @@ class Node{
 };
 
 //typedef list<Edge> edge_collection;
-
-typedef map<string, Node*> MapAdjItem;        // map frome the name of the edge.end_point to the Node
-
+class MapAdjHead;
+typedef map<string, MapAdjHead *> MapAdjItem;        // map frome the name of the edge.end_point to the Node
 
 // cotains the information of each node.
 class MapAdjHead{
@@ -59,7 +59,7 @@ class MapAdjHead{
 
 
 
-typedef map<string, MapAdjHead *> MapAdj;
+typedef vector<MapAdjHead *> MapAdj;  // the nodes stand for status now.
 
 typedef map<string, MapAdj *>  MapHeaders;  // map from the name of CLICKEVENT to the adj table of the relevent submap;
 
