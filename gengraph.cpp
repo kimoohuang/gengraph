@@ -314,7 +314,6 @@ int main(int argc , char * argv[]){
                 file_recom << endl << endl;
             }
         }
-cout<<"fuckkkkk"<<endl;
 
         for(it_mh = graph->map_headers.begin();it_mh != graph->map_headers.end();++it_mh){
             //cout << "N0 -> N" <<  
@@ -426,7 +425,6 @@ cout<<"fuckkkkk"<<endl;
             if((*it_ma_t)->node->log_type == TAINTSINK){
                 for(it_ma = temp_map_adj->begin();it_ma != temp_map_adj->end();++it_ma){
                     if((*it_ma)->filter_flag != 0){
-                        cout <<"fuck!"<<endl;
                         it_mai_2 = (*it_ma)->map_adj_item.find((*it_ma_t)->node->log_detail);
                         if(it_mai_2 != (*it_ma)->map_adj_item.end()){
                             (*it_ma)->map_adj_item.erase((*it_ma_t)->node->log_detail);//erase the sink edge
@@ -443,7 +441,6 @@ cout<<"fuckkkkk"<<endl;
             }//if TAINTSINK
         }
 
-        cout <<"fuck!!"<<endl;
         bool del_all = false;
         while(!del_all){ 
             for(it_ma_t = temp_map_adj->begin();it_ma_t != temp_map_adj->end();++it_ma_t){
@@ -455,16 +452,20 @@ cout<<"fuckkkkk"<<endl;
                 }
             }
         }
-        cout <<"fuck!!!"<<endl;
 
         //print the filter graph
         //MapAdj::iterator it_ma;
+        count = 0;
         file_filter << "digraph G {" << endl;
+            file_filter << "node [shape = circle];" << endl; 
         for(it_ma = temp_map_adj->begin();it_ma != temp_map_adj->end(); ++ it_ma){
-            (*it_ma)->printNodeDot(file_filter);
+            //(*it_ma)->printNodeDot(file_filter);
+            (*it_ma)->printFilNodeDot(file_filter,count++);
         }//for it_ma
+            file_filter << "N0 -> N0 [ label = \"∑\"]" << endl; 
         for(it_ma = temp_map_adj->begin();it_ma != temp_map_adj->end(); ++ it_ma){
-            (*it_ma)->printEdgeDot(file_filter);
+            //(*it_ma)->printEdgeDot(file_filter);
+            (*it_ma)->printFilEdgeDot(file_filter,count++);
         }//for it_ma
         file_filter << "}";
     }//if argv

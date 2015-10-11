@@ -189,9 +189,9 @@ void MapAdjHead::printNodeDot(fstream &dot_file){
                     }
                     else{
                         if(node->log_extra.length() > 13)
-                            dot_file << "shape=box,color=red,style=bold,label=\"Block the Message!" <<"\\nTag:"<< node->log_tag << "\\n" << node->log_detail<<"\\n"<<node->log_extra << "\"];" << endl;
+                            dot_file << "shape=doublecircle,color=red,style=bold,label=\"Block the Message!" <<"\\nTag:"<< node->log_tag << "\\n" << node->log_detail<<"\\n"<<node->log_extra << "\"];" << endl;
                         else
-                            dot_file << "shape=box,color=red,style=bold,label=\"Block the Message!" <<"\\nTag:"<< node->log_tag << "\\n" << node->log_detail << "\"];" << endl;
+                            dot_file << "shape=doublecircle,color=red,style=bold,label=\"Block the Message!" <<"\\nTag:"<< node->log_tag << "\\n" << node->log_detail << "\"];" << endl;
                     }
 
                 }
@@ -222,5 +222,55 @@ void MapAdjHead::printEdgeDot(fstream &dot_file){
     for(it_mai = map_adj_item.begin();it_mai != map_adj_item.end(); ++it_mai){
         if(it_mai->second->node != NULL)
             dot_file << "N" << node->number << " -> " << "N" << it_mai->second->node->number << ";" << endl;
+    }
+}
+
+void MapAdjHead::printFilNodeDot(fstream &dot_file, int num){
+    if(node != NULL){
+    //dot_file << "N" << num << " [";
+    node -> number = num;
+        switch(node->log_type){
+            case INMETHOD:
+                {
+                    if(filter_flag != 0){
+                        if(node->log_extra.length() > 13){
+    dot_file << "N" << node->number << " [shape=doublecircle,color=red,style=bold];" << endl;}
+                        else{
+    dot_file << "N" << node->number << " [shape=doublecircle,color=red,style=bold];" << endl;
+                    }
+                    }
+
+                }
+                break;
+            case CLICKEVENT:
+                {
+                    ;
+                }
+                break;
+            case TAINTSINK:
+                {
+                    ;
+                }
+                break;
+            default:
+                break;
+        }
+    }
+}
+
+unsigned int BKDRHash(string str){
+    unsigned int seed = 131;
+    unsigned int hash = 0;
+    string::iterator it;
+    for( it = str.begin(); it!=str.end(); ++it)
+        hash = hash * seed + (*it);
+    return (hash & 0x7FFFFFFF);
+}
+
+void MapAdjHead::printFilEdgeDot(fstream &dot_file,int num){
+    MapAdjItem::iterator it_mai;
+    for(it_mai = map_adj_item.begin();it_mai != map_adj_item.end(); ++it_mai){
+        if(it_mai->second->node != NULL)
+            dot_file << "N" << node->number << " -> " << "N" << it_mai->second->node->number <<" [ label = \"" << BKDRHash(it_mai->second->node->log_detail)<< "\" ];" << endl;
     }
 }
