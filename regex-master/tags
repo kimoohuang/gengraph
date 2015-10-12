@@ -1,0 +1,107 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+AddTransition	src/regexstate.cpp	/^void RegExState::AddTransition(char inputCh, RegExState *pState){$/;"	f	class:RegExState
+CC	src/Makefile	/^CC              :=  g++ -g -Wall -Wextra -Wparentheses -pedantic++$/;"	m
+CC	test/Makefile	/^CC              :=  g++ -Wall -g$/;"	m
+CCFLAGS	test/Makefile	/^CCFLAGS         :=  -Wall -g $/;"	m
+CLOSE_PAREN	src/regex.cpp	36;"	d	file:
+CLOSURE	src/regex.cpp	32;"	d	file:
+CXX	src/Makefile	/^CXX             :=  g++$/;"	m
+CleanUp	src/regex.cpp	/^void RegEx::CleanUp() {$/;"	f	class:RegEx
+Closure	src/regex.cpp	/^bool RegEx::Closure() {$/;"	f	class:RegEx
+ClosureOptional	src/regex.cpp	/^bool RegEx::ClosureOptional() {$/;"	f	class:RegEx
+ClosurePlus	src/regex.cpp	/^bool RegEx::ClosurePlus() {$/;"	f	class:RegEx
+Compile	src/regex.cpp	/^bool RegEx::Compile(std::string strRegEx) {$/;"	f	class:RegEx
+Concatenate	src/regex.cpp	/^bool RegEx::Concatenate() {$/;"	f	class:RegEx
+ConstructThompsonNFA	src/regex.cpp	/^bool RegEx::ConstructThompsonNFA() {$/;"	f	class:RegEx
+ConvertNFAtoDFA	src/regex.cpp	/^void RegEx::ConvertNFAtoDFA() {$/;"	f	class:RegEx
+CovertToPostfix	src/regex.cpp	/^int RegEx::CovertToPostfix() {$/;"	f	class:RegEx
+EPSILON	src/regex.cpp	31;"	d	file:
+EpsilonClosure	src/regex.cpp	/^void RegEx::EpsilonClosure(std::set<RegExState*> startSet, std::set<RegExState*> &result) {$/;"	f	class:RegEx
+FALSE_CONCAT	src/regex.cpp	38;"	d	file:
+GetNFAState	src/regexstate.cpp	/^std::set<RegExState*>& RegExState::GetNFAState() { $/;"	f	class:RegExState
+GetTransition	src/regexstate.cpp	/^void RegExState::GetTransition(char inputCh, Table &States) {$/;"	f	class:RegExState
+IsDeadEnd	src/regexstate.cpp	/^bool RegExState::IsDeadEnd() {$/;"	f	class:RegExState
+IsInput	src/regex.cpp	/^bool RegEx::IsInput(char inputCh)      { return(!IsMetaChar(inputCh));   }$/;"	f	class:RegEx
+IsLeftParan	src/regex.cpp	/^bool RegEx::IsLeftParan(char inputCh)  { return(inputCh == OPEN_PAREN);  }$/;"	f	class:RegEx
+IsMetaChar	src/regex.cpp	/^bool RegEx::IsMetaChar( char inputCh ) {$/;"	f	class:RegEx
+IsRightParan	src/regex.cpp	/^bool RegEx::IsRightParan(char inputCh) { return(inputCh == CLOSE_PAREN); }$/;"	f	class:RegEx
+Match	src/regex.cpp	/^bool RegEx::Match(std::string strText) {$/;"	f	class:RegEx
+MinimizeDFA	src/regex.cpp	/^void RegEx::MinimizeDFA () {$/;"	f	class:RegEx
+Move	src/regex.cpp	/^void RegEx::Move(char chInput, std::set<RegExState*> NFAState, std::set<RegExState*> &Result) {$/;"	f	class:RegEx
+OPEN_PAREN	src/regex.cpp	35;"	d	file:
+OPTIONAL	src/regex.cpp	34;"	d	file:
+OR	src/regex.cpp	37;"	d	file:
+Or	src/regex.cpp	/^bool RegEx::Or() {$/;"	f	class:RegEx
+PLUS_CLOSURE	src/regex.cpp	33;"	d	file:
+P_CXX_OBJS	src/Makefile	/^P_CXX_OBJS        :=  ${P_CXX_SRCS:.cpp=.o}$/;"	m
+P_CXX_OBJS	test/Makefile	/^P_CXX_OBJS        :=  ${P_CXX_SRCS:.cpp=.o}$/;"	m
+P_CXX_SRCS	src/Makefile	/^P_CXX_SRCS        :=  $(wildcard *.cpp)$/;"	m
+P_CXX_SRCS	test/Makefile	/^P_CXX_SRCS        :=  $(wildcard *.cpp)$/;"	m
+P_INCLUDE_DIRS	src/Makefile	/^P_INCLUDE_DIRS  :=  ..\/inc$/;"	m
+P_INCLUDE_DIRS	test/Makefile	/^P_INCLUDE_DIRS  :=  ..\/inc$/;"	m
+P_LIBRARIES	test/Makefile	/^P_LIBRARIES     :=  regex$/;"	m
+P_LIBRARY_DIRS	test/Makefile	/^P_LIBRARY_DIRS  :=  ..\/src$/;"	m
+P_NAME	src/Makefile	/^P_NAME          :=  libregex.a$/;"	m
+P_NAME	test/Makefile	/^P_NAME          :=  tstregex$/;"	m
+P_OBJS	src/Makefile	/^P_OBJS          :=  $(P_CXX_OBJS) $/;"	m
+PopTable	src/regex.cpp	/^bool RegEx::PopTable(Table  &NFATable) {$/;"	f	class:RegEx
+PrePreprocessConcatenation	src/regex.cpp	/^int RegEx::PrePreprocessConcatenation(void) {$/;"	f	class:RegEx
+PreProcessBracket	src/regex.cpp	/^std::string RegEx::PreProcessBracket( std::string strRegEx) {$/;"	f	class:RegEx
+PreProcessClosure	src/regex.cpp	/^int RegEx::PreProcessClosure() {$/;"	f	class:RegEx
+PreProcessLiterals	src/regex.cpp	/^int RegEx::PreProcessLiterals() {$/;"	f	class:RegEx
+PreProcessOr	src/regex.cpp	/^int RegEx::PreProcessOr() {$/;"	f	class:RegEx
+PrintTable	src/regex.cpp	/^void RegEx::PrintTable(Table &table) {$/;"	f	class:RegEx
+PushOnCharacterStack	src/regex.cpp	/^void RegEx::PushOnCharacterStack(char chInput) {$/;"	f	class:RegEx
+ReduceDFA	src/regex.cpp	/^void RegEx::ReduceDFA() {$/;"	f	class:RegEx
+RegEx	inc/regex.h	/^class RegEx {$/;"	c
+RegEx	src/regex.cpp	/^RegEx::RegEx() {$/;"	f	class:RegEx
+RegExPattern	inc/regexpattern.h	/^	RegExPattern() : m_pState(NULL), m_nStartIndex(-1) {};$/;"	f	class:RegExPattern
+RegExPattern	inc/regexpattern.h	/^	RegExPattern(const RegExPattern &other){ $/;"	f	class:RegExPattern
+RegExPattern	inc/regexpattern.h	/^class RegExPattern {$/;"	c
+RegExState	inc/regexstate.h	/^	RegExState() : m_nStateID(-1), m_bAcceptingState(false) {};$/;"	f	class:RegExState
+RegExState	inc/regexstate.h	/^	RegExState(int nID) : m_nStateID(nID), m_bAcceptingState(false), m_GroupID(0) {};$/;"	f	class:RegExState
+RegExState	inc/regexstate.h	/^class RegExState{$/;"	c
+RegExState	src/regexstate.cpp	/^RegExState::RegExState(const RegExState &other){ $/;"	f	class:RegExState
+RegExState	src/regexstate.cpp	/^RegExState::RegExState(std::set<RegExState*> NFAState, int nID) {$/;"	f	class:RegExState
+RemoveTransition	src/regexstate.cpp	/^void RegExState::RemoveTransition(RegExState* pState) {$/;"	f	class:RegExState
+SUBDIRS	Makefile	/^SUBDIRS = src \\$/;"	m
+StateIterator	inc/regex.h	/^	typedef std::set<RegExState*>::iterator StateIterator;$/;"	t	class:RegEx
+StateIterator	inc/regexstate.h	/^	typedef std::set<RegExState*>::iterator StateIterator;$/;"	t	class:RegExState
+Table	inc/regex.h	/^	typedef std::vector<RegExState*> Table;$/;"	t	class:RegEx
+Table	inc/regexstate.h	/^	typedef std::vector<RegExState*> Table;$/;"	t	class:RegExState
+TableIterator	inc/regex.h	/^	typedef Table::iterator TableIterator; $/;"	t	class:RegEx
+TableReverseIterator	inc/regex.h	/^	typedef Table::reverse_iterator TableReverseIterator;$/;"	t	class:RegEx
+_REGEXSTATE_H_	inc/regexstate.h	24;"	d
+_REGEX_PATTERN_H_	inc/regexpattern.h	2;"	d
+_REG_EX_H_	inc/regex.h	24;"	d
+getStringID	src/regexstate.cpp	/^std::string RegExState::getStringID(){$/;"	f	class:RegExState
+m_CharacterClassStack	inc/regex.h	/^	std::stack<Table >       m_CharacterClassStack;$/;"	m	class:RegEx
+m_CurPreProcChar	inc/regex.h	/^	char                     m_CurPreProcChar;$/;"	m	class:RegEx
+m_DFATable	inc/regex.h	/^	Table m_DFATable;$/;"	m	class:RegEx
+m_ExpressionStack	inc/regex.h	/^	std::stack<char>         m_ExpressionStack;$/;"	m	class:RegEx
+m_GroupID	inc/regexstate.h	/^	int  m_GroupID;$/;"	m	class:RegExState
+m_InfixRegEx	inc/regex.h	/^	char*                    m_InfixRegEx;$/;"	m	class:RegEx
+m_InputSet	inc/regex.h	/^	std::set<char>           m_InputSet;$/;"	m	class:RegEx
+m_Marked	inc/regexstate.h	/^	bool m_Marked;$/;"	m	class:RegExState
+m_NFAStates	inc/regexstate.h	/^	std::set<RegExState*> m_NFAStates;	$/;"	m	class:RegExState
+m_NFATable	inc/regex.h	/^	Table m_NFATable;$/;"	m	class:RegEx
+m_PostStrRegEx	inc/regex.h	/^	std::string              m_PostStrRegEx;$/;"	m	class:RegEx
+m_Transition	inc/regexstate.h	/^	std::multimap<char, RegExState*> m_Transition;	$/;"	m	class:RegExState
+m_bAcceptingState	inc/regexstate.h	/^	bool m_bAcceptingState;$/;"	m	class:RegExState
+m_nNextStateID	inc/regex.h	/^	int                      m_nNextStateID;$/;"	m	class:RegEx
+m_nStartIndex	inc/regexpattern.h	/^	int m_nStartIndex;$/;"	m	class:RegExPattern
+m_nStateID	inc/regexstate.h	/^	int m_nStateID;$/;"	m	class:RegExState
+m_pState	inc/regexpattern.h	/^	RegExState* m_pState;$/;"	m	class:RegExPattern
+m_strText	inc/regex.h	/^	std::string              m_strText;$/;"	m	class:RegEx
+main	test/tregex.cpp	/^int main( int argc, char **argv ) {$/;"	f
+operator =	inc/regexpattern.h	/^	RegExPattern& operator=(const RegExPattern& other){$/;"	f	class:RegExPattern
+operator =	src/regexstate.cpp	/^RegExState& RegExState::operator=(const RegExState& other) { $/;"	f	class:RegExState
+operator ==	src/regexstate.cpp	/^bool RegExState::operator==(const RegExState& other) {$/;"	f	class:RegExState
+~RegEx	src/regex.cpp	/^RegEx::~RegEx(){$/;"	f	class:RegEx
+~RegExPattern	inc/regexpattern.h	/^	virtual ~RegExPattern() {};$/;"	f	class:RegExPattern
+~RegExState	src/regexstate.cpp	/^RegExState::~RegExState() {$/;"	f	class:RegExState
