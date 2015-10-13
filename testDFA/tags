@@ -1,0 +1,61 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+DState	dfa0.c	/^struct DState$/;"	s	file:
+DState	dfa0.c	/^typedef struct DState DState;$/;"	t	typeref:struct:DState	file:
+Frag	dfa0.c	/^struct Frag$/;"	s	file:
+Frag	dfa0.c	/^typedef struct Frag Frag;$/;"	t	typeref:struct:Frag	file:
+List	dfa0.c	/^struct List$/;"	s	file:
+List	dfa0.c	/^typedef struct List List;$/;"	t	typeref:struct:List	file:
+Match	dfa0.c	/^	Match = 256,$/;"	e	enum:__anon1	file:
+Ptrlist	dfa0.c	/^typedef union Ptrlist Ptrlist;$/;"	t	typeref:union:Ptrlist	file:
+Ptrlist	dfa0.c	/^union Ptrlist$/;"	u	file:
+Split	dfa0.c	/^	Split = 257$/;"	e	enum:__anon1	file:
+State	dfa0.c	/^struct State$/;"	s	file:
+State	dfa0.c	/^typedef struct State State;$/;"	t	typeref:struct:State	file:
+addstate	dfa0.c	/^addstate(List *l, State *s)$/;"	f
+alldstates	dfa0.c	/^DState *alldstates;$/;"	v
+append	dfa0.c	/^append(Ptrlist *l1, Ptrlist *l2)$/;"	f
+c	dfa0.c	/^	int c;$/;"	m	struct:State	file:
+dstate	dfa0.c	/^dstate(List *l)$/;"	f
+frag	dfa0.c	/^frag(State *start, Ptrlist *out)$/;"	f
+ismatch	dfa0.c	/^ismatch(List *l)$/;"	f
+l	dfa0.c	/^	List l;$/;"	m	struct:DState	file:
+l1	dfa0.c	/^List l1, l2;$/;"	v
+l2	dfa0.c	/^List l1, l2;$/;"	v
+lastlist	dfa0.c	/^	int lastlist;$/;"	m	struct:State	file:
+left	dfa0.c	/^	DState *left;$/;"	m	struct:DState	file:
+list1	dfa0.c	/^list1(State **outp)$/;"	f
+listcmp	dfa0.c	/^listcmp(List *l1, List *l2)$/;"	f	file:
+listid	dfa0.c	/^static int listid;$/;"	v	file:
+main	dfa0.c	/^main(int argc, char **argv)$/;"	f
+match	dfa0.c	/^match(DState *start, char *s)$/;"	f
+matchstate	dfa0.c	/^State matchstate = { Match };	\/* matching state *\/$/;"	v
+n	dfa0.c	/^	int n;$/;"	m	struct:List	file:
+next	dfa0.c	/^	DState *next[256];$/;"	m	struct:DState	file:
+next	dfa0.c	/^	Ptrlist *next;$/;"	m	union:Ptrlist	file:
+nextstate	dfa0.c	/^nextstate(DState *d, int c)$/;"	f
+nstate	dfa0.c	/^int nstate;$/;"	v
+out	dfa0.c	/^	Ptrlist *out;$/;"	m	struct:Frag	file:
+out	dfa0.c	/^	State *out;$/;"	m	struct:State	file:
+out1	dfa0.c	/^	State *out1;$/;"	m	struct:State	file:
+patch	dfa0.c	/^patch(Ptrlist *l, State *s)$/;"	f
+pop	dfa0.c	229;"	d	file:
+pop	dfa0.c	276;"	d	file:
+post2nfa	dfa0.c	/^post2nfa(char *postfix)$/;"	f
+ptrcmp	dfa0.c	/^ptrcmp(const void *a, const void *b)$/;"	f	file:
+push	dfa0.c	228;"	d	file:
+push	dfa0.c	277;"	d	file:
+re2post	dfa0.c	/^re2post(char *re)$/;"	f
+right	dfa0.c	/^	DState *right;$/;"	m	struct:DState	file:
+s	dfa0.c	/^	State **s;$/;"	m	struct:List	file:
+s	dfa0.c	/^	State *s;$/;"	m	union:Ptrlist	file:
+start	dfa0.c	/^	State *start;$/;"	m	struct:Frag	file:
+startdstate	dfa0.c	/^startdstate(State *start)$/;"	f
+startlist	dfa0.c	/^startlist(State *start, List *l)$/;"	f
+startnfa	dfa0.c	/^startnfa(State *start, List *l)$/;"	f
+state	dfa0.c	/^state(int c, State *out, State *out1)$/;"	f
+step	dfa0.c	/^step(List *clist, int c, List *nlist)$/;"	f
