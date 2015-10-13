@@ -465,9 +465,10 @@ int main(int argc , char * argv[]){
             file_filter << "N0 -> N0 [ label = \"∑\"]" << endl; 
         for(it_ma = temp_map_adj->begin();it_ma != temp_map_adj->end(); ++ it_ma){
             //(*it_ma)->printEdgeDot(file_filter);
-            (*it_ma)->printFilEdgeDot(file_filter,count++);
+            (*it_ma)->printFilEdgeDot(file_filter,0);
         }//for it_ma
         file_filter << "}";
+        file_filter << "#"<<count<<endl;
     }//if argv
 
 
