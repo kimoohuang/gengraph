@@ -48,8 +48,8 @@ public:
 
 
 private:
-	Table m_NFATable;
-	Table m_DFATable;
+	Table m_NFATable;  // a dfa
+	Table m_DFATable; // a dfa
 
 	std::stack<Table >       m_CharacterClassStack;
 	std::stack<char>         m_ExpressionStack;

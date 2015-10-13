@@ -34,9 +34,9 @@ private:
 public:
 	typedef std::vector<RegExState*> Table;
 	typedef std::set<RegExState*>::iterator StateIterator;
-	std::multimap<char, RegExState*> m_Transition;	
-	int m_nStateID;
-	bool m_bAcceptingState;
+	std::multimap<char, RegExState*> m_Transition;	 // translate fuctiuon
+	int m_nStateID;     //state id
+	bool m_bAcceptingState; //accept mark 
 	bool m_Marked;
 	int  m_GroupID;
 

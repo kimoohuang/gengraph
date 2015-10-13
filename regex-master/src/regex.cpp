@@ -272,8 +272,8 @@ void RegEx::ConvertNFAtoDFA() {
 			Move(*iter, CurDFAState->GetNFAState(), MoveRes);
 			EpsilonClosure(MoveRes, EpsilonClosureRes);
 
-			StateIterator MoveResItr;
-			StateIterator EpsilonClosureResItr;
+			//StateIterator MoveResItr;
+			//StateIterator EpsilonClosureResItr;
 
 			bool bFound = false;
 			RegExState *s   = NULL;
@@ -292,7 +292,7 @@ void RegEx::ConvertNFAtoDFA() {
 			} else {
 				CurDFAState->AddTransition(*iter, s);
 			}
-		}
+		} // for inputSet
 	}	
 	ReduceDFA();
 }
