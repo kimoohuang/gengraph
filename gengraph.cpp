@@ -212,6 +212,7 @@ int main(int argc , char * argv[]){
             case TAINTSINK:
                 {
                     if(log_flag == true){
+
                         is_clickevent = false;
                         //log_flag = false;
                         graph->is_sink.insert(IsSink::value_type(temp_click_node->log_detail , true));
@@ -458,14 +459,26 @@ int main(int argc , char * argv[]){
         count = 0;
         file_filter << "digraph G {" << endl;
             file_filter << "node [shape = circle];" << endl; 
+        int numoffil = 0;
+        //MapAdjItem::iterator it_mai; 
+        for(it_mai = temp_map_adj->front()->map_adj_item.begin(); it_mai != temp_map_adj->front()->map_adj_item.end(); ++it_mai){
+            if(it_mai->second->node!=NULL)
+                numoffil ++;
+        }
+        cout << numoffil <<endl;
+
         for(it_ma = temp_map_adj->begin();it_ma != temp_map_adj->end(); ++ it_ma){
             //(*it_ma)->printNodeDot(file_filter);
-            (*it_ma)->printFilNodeDot(file_filter,count++);
+            (*it_ma)->printFilNodeDot(file_filter,count++, numoffil);
         }//for it_ma
             file_filter << "N0 -> N0 [ label = \"∑\"]" << endl; 
-        for(it_ma = temp_map_adj->begin();it_ma != temp_map_adj->end(); ++ it_ma){
+
+        for(int i_count=0; i_count< numoffil; ++i_count)
+            file_filter << "N0 -> N"<<i_count+1<< " [ label =\"epsilon\"]" << endl;
+        temp_map_adj->front()->printFront(file_filter, numoffil);
+        for(it_ma = temp_map_adj->begin()+1;it_ma != temp_map_adj->end(); ++ it_ma){
             //(*it_ma)->printEdgeDot(file_filter);
-            (*it_ma)->printFilEdgeDot(file_filter,0);
+            (*it_ma)->printFilEdgeDot(file_filter,numoffil);
         }//for it_ma
         file_filter << "}";
         file_filter << "#"<<count<<endl;

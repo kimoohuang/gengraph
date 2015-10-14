@@ -55,8 +55,9 @@ class MapAdjHead{
         void printNodeDot(std::fstream &file_dot, std::fstream &file_recom);
         void printNodeDot(std::fstream &file_dot);
         void printEdgeDot(std::fstream &file_dot);
-        void printFilNodeDot(std::fstream &file_dot,int num);
+        void printFilNodeDot(std::fstream &file_dot,int num, int count);
         void printFilEdgeDot(std::fstream &file_dot, int num);
+        void printFront(std::fstream &file_dot, int count);
 };
 
 

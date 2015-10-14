@@ -42,6 +42,10 @@ Node::Node(string line, LogType type){
                 }
 
             }
+        case OTHER:
+            {
+//                log_detail = line;
+            }
             break;
         default:
             break;
@@ -225,7 +229,7 @@ void MapAdjHead::printEdgeDot(fstream &dot_file){
     }
 }
 
-void MapAdjHead::printFilNodeDot(fstream &dot_file, int num){
+void MapAdjHead::printFilNodeDot(fstream &dot_file, int num, int count){
     if(node != NULL){
     //dot_file << "N" << num << " [";
     node -> number = num;
@@ -234,9 +238,9 @@ void MapAdjHead::printFilNodeDot(fstream &dot_file, int num){
                 {
                     if(filter_flag != 0){
                         if(node->log_extra.length() > 13){
-    dot_file << "N" << node->number << " [shape=doublecircle,color=red,style=bold];" << endl;}
+    dot_file << "N" << node->number +count << " [shape=doublecircle,color=red,style=bold];" << endl;}
                         else{
-    dot_file << "N" << node->number << " [shape=doublecircle,color=red,style=bold];" << endl;
+    dot_file << "N" << node->number + count << " [shape=doublecircle,color=red,style=bold];" << endl;
                     }
                     }
 
@@ -271,6 +275,16 @@ void MapAdjHead::printFilEdgeDot(fstream &dot_file,int num){
     MapAdjItem::iterator it_mai;
     for(it_mai = map_adj_item.begin();it_mai != map_adj_item.end(); ++it_mai){
         if(it_mai->second->node != NULL)
-            dot_file << "N" << node->number << " -> " << "N" << it_mai->second->node->number <<" [ label = \"" << BKDRHash(it_mai->second->node->log_detail)<< "\" ];" << endl;
+            dot_file << "N" << node->number + num << " -> " << "N" << it_mai->second->node->number + num<<" [ label = \"" << BKDRHash(it_mai->second->node->log_detail)<< "\" ];" << endl;
     }
 }
+
+void MapAdjHead::printFront(std::fstream &file_dot, int count){
+    int i = 0;
+    MapAdjItem::iterator it_mai;
+    for(it_mai = map_adj_item.begin();it_mai != map_adj_item.end(); ++it_mai){
+        if(it_mai->second->node != NULL)
+            file_dot<< "N" << ++i << " -> " << "N" << it_mai->second->node->number +count <<" [ label = \"" << BKDRHash(it_mai->second->node->log_detail)<< "\" ];" << endl;
+    }
+}
+
