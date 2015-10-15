@@ -457,6 +457,7 @@ int main(int argc , char * argv[]){
         //print the filter graph
         //MapAdj::iterator it_ma;
         count = 0;
+        file_filter << "#The hash value of epsilon is 1160755946; And the hash of ∑ is 2146952987."<< endl;
         file_filter << "digraph G {" << endl;
             file_filter << "node [shape = circle];" << endl; 
         int numoffil = 0;
@@ -471,17 +472,17 @@ int main(int argc , char * argv[]){
             //(*it_ma)->printNodeDot(file_filter);
             (*it_ma)->printFilNodeDot(file_filter,count++, numoffil);
         }//for it_ma
-            file_filter << "N0 -> N0 [ label = \"∑\"]" << endl; 
+            file_filter << "N0 -> N0 [ label = \""<< BKDRHash("∑")<<"\" ];" << endl; 
 
         for(int i_count=0; i_count< numoffil; ++i_count)
-            file_filter << "N0 -> N"<<i_count+1<< " [ label =\"epsilon\"]" << endl;
+            file_filter << "N0 -> N"<<i_count+1<< " [ label = \""<<BKDRHash("epsilon")<<"\" ];" << endl;
         temp_map_adj->front()->printFront(file_filter, numoffil);
         for(it_ma = temp_map_adj->begin()+1;it_ma != temp_map_adj->end(); ++ it_ma){
             //(*it_ma)->printEdgeDot(file_filter);
             (*it_ma)->printFilEdgeDot(file_filter,numoffil);
         }//for it_ma
         file_filter << "}";
-        file_filter << "#"<<count<<endl;
+        file_filter << "#"<<count + numoffil<<endl;
     }//if argv
 
 

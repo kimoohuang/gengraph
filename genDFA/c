@@ -1,0 +1,12 @@
+#The hash value of epsilon is 1160755946; And the hash of ∑ is 2146952987.
+digraph G {
+node [shape = circle];
+N5 [shape=doublecircle,color=red,style=bold];
+N0 -> N0 [ label = "2146952987" ];
+N0 -> N1 [ label = "1160755946" ];
+N1 -> N2 [ label = "1074333427" ];
+N2 -> N3 [ label = "563474626" ];
+N3 -> N4 [ label = "1508508100" ];
+N4 -> N5 [ label = "1732608597" ];
+N4 -> N3 [ label = "563474626" ];
+}#6

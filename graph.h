@@ -83,4 +83,9 @@ class Graph{
         
 };
 
+unsigned int BKDRHash(string str);
+
+
+
+
 #endif // graph.h
