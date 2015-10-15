@@ -27,8 +27,10 @@ int main(int argc, char * agrv[])
 {
     char str[] = "Ljava/security/MessageDigest;digest,([B)[B";
     printf("%u\n", BKDRHash(str));
-    char str2[] = "EPSION";
+    char str2[] = "epsilon";
     printf("%u\n", BKDRHash(str2));
+    char str3[] = "∑";
+    printf("%u\n", BKDRHash(str3));
 }
 
 
