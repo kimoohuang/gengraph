@@ -1,25 +1,3 @@
-/** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **
- *  This file is part of regex library
- *  Copyright (C) 2011 Avinash Dongre ( dongre.avinash@gmail.com )
- *
- *  Permission is hereby granted, free of charge, to any person obtaining a copy
- *  of this software and associated documentation files (the "Software"), to deal
- *  in the Software without restriction, including without limitation the rights
- *  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- *  copies of the Software, and to permit persons to whom the Software is
- *  furnished to do so, subject to the following conditions:
- * 
- *  The above copyright notice and this permission notice shall be included in
- *  all copies or substantial portions of the Software.
- * 
- *  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- *  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- *  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- *  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- *  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- *  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- *  THE SOFTWARE.
- ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** ** **/
 #include <iostream>
 #include <algorithm>
 #include <stdlib.h>
@@ -51,7 +29,7 @@ AutoMaton::AutoMaton(std::fstream &f_nfa, int num){
             size_t p4 = line.find("\"");
             size_t p5 = line.find("]");
             unsigned int label = (unsigned int)atol(line.substr(p4+1, p5-p4-3).c_str());
-            if(label != 1160755946 && label != 2146952987)  // epsilon and sigma
+            if(label != 1160755946 && label != 1893067709)  // epsilon and sigma
                 m_InputSet.insert(label);
             m_NFATable[left]->m_Transition.insert(std::multimap<Letter, FAState*>::value_type(label, m_NFATable[right]));
         }
@@ -80,10 +58,14 @@ void AutoMaton::CleanUp(){
 
 void AutoMaton::PrintTable(Table &table) {
 	std::string TableString;
+    std::stringstream sout;
+    sout << table.size();
+
+    TableString += "NUMOFNODES:" + sout.str() + "\n";
 	for(int i = 0; i < (int)table.size(); ++i) {
 		FAState *pState = table[i];
 		if(pState->m_bAcceptingState) {
-			TableString += "\t" + pState->getStringID() + "\t\n";
+			TableString += "ACCEPT:" + pState->getStringID() + "\n";
 		}
 	}
 	TableString += "\n";
@@ -92,22 +74,22 @@ void AutoMaton::PrintTable(Table &table) {
 		std::vector<FAState*> State;
 		pState->GetTransition(1160755946, State); //get epsilon transition
 		for(int j = 0; j < (int)State.size(); ++j) {
-			TableString += "\t" + pState->getStringID() + " -> " + State[j]->getStringID();
-			TableString += "\t[label = \"epsilon \"]\n";
+			TableString += "EDGE:" + pState->getStringID() + " -> " + State[j]->getStringID();
+			TableString += " [label = \"epsilon \"]\n";
 		}
-		pState->GetTransition(2146952987, State); //get sigma transition
+		pState->GetTransition(1893067709, State); //get sigma transition
 		for(int j = 0; j < (int)State.size(); ++j) {
-			TableString += "\t" + pState->getStringID() + " -> " + State[j]->getStringID();
-			TableString += "\t[label = \"sigma \"]\n";
+			TableString += "EDGE:" + pState->getStringID() + " -> " + State[j]->getStringID();
+			TableString += " [label = \"sigma \"]\n";
 		}
 		std::set<Letter>::iterator iter;
 		for(iter = m_InputSet.begin(); iter != m_InputSet.end(); ++iter) {
 			pState->GetTransition(*iter, State);
 			for(int j = 0; j < (int)State.size(); ++j) {
-				TableString += "\t" + pState->getStringID() + " -> " + State[j]->getStringID();
+				TableString += "EDGE:" + pState->getStringID() + " -> " + State[j]->getStringID();
 				std::stringstream out;
 				out << *iter;
-				TableString += "\t[label = \"" + out.str() + " \"]\n";
+				TableString += " [label = \"" + out.str() + " \"]\n";
 			}
 		}
 	}

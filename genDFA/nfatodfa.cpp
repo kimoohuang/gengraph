@@ -15,6 +15,7 @@ int main(int argc, char * argv[])
         cout <<"    nfatodfa NFA_FILE dfa_FILE" << endl;
         cout <<"    NFA_FILE : input, the NFA_FILE" <<endl;
         cout <<"    DFA_FILE : output, the DFA_FILE" <<endl;
+        return 0;
     }
 
     fstream f_nfa(argv[1], ios_base::in);
@@ -28,9 +29,9 @@ int main(int argc, char * argv[])
     size_t pos = numofnodes.find("#");
     int numNfaNodes = atoi(numofnodes.substr(pos+1).c_str());
     //cout << numNfaNodes;
-    //
     f_nfa.close();
     f_nfa.open(argv[1], ios_base::in);
+
 /*
     while(getline(f_nfa, line)){
         if(line.find("#")!= line.npos)
@@ -56,9 +57,9 @@ int main(int argc, char * argv[])
     }
 */
     AutoMaton* am = new AutoMaton(f_nfa, numNfaNodes);
-    am->PrintNTable();
+    //am->PrintNTable();
     am->ConvertNFAtoDFA();
-    am->PrintDTable();
+    //am->PrintDTable();
     am->MinimizeDFA();
     am->PrintDTable();
 
